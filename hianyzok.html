@@ -6,7 +6,7 @@
      <script>  
     // Nevek lekérése a szervertől
     let hianyzok = [];  // hiányzók tömbje
-     fetch('http://naplo.onrender.com/api/tanulok')
+     fetch('https://naplo.onrender.com/api/tanulok')
         .then(valasz => valasz.json())             // átalakítás JSON-ból JS-be
         .then(adatok => {                          // adatok már JavaScript tömbben vannak, -a szerver-válasz feldolgozásának kezdete
               console.log(adatok);                 // kiírjuk őket konzolra
@@ -41,7 +41,7 @@
                   console.log(kuldes);
                   kuldes.addEventListener('click', () => {
                   console.log('Megnyomtad az Elküld gombot!');
-                  fetch('http://naplo.onrender.com/api/hianyzok', {
+                  fetch('https://naplo.onrender.com/api/hianyzok', {
                          method: 'POST',
                          headers: {'Content-Type': 'application/json' },
                          body: JSON.stringify(hianyzok)  // JSON-ná alakítja és elküldi
