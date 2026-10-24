@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Hiányzók</title>
+     <script>  
+    // Nevek lekérése a szervertől
+    let hianyzok = [];  // hiányzók tömbje
+     fetch('http://localhost:3000/api/tanulok')
+        .then(valasz => valasz.json())             // átalakítás JSON-ból JS-be
+        .then(adatok => {                          // adatok már JavaScript tömbben vannak, -a szerver-válasz feldolgozásának kezdete
+              console.log(adatok);                 // kiírjuk őket konzolra
+              const nevlista = document.getElementById('nevlista');
+              for (let i = 0; i < adatok.length; i++)          // az adatok tömbön végig kell mennünk
+                  { const sor = document.createElement('div'); // div elemekt gyártunk 5-öt
+                    sor.textContent = adatok[i];               // most adjuk hozzá a nevet
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.addEventListener('change', () => {       // bepipátuk a checkboxot/kivettük a pipát
+                    console.log('Megváltozott a checkbox állapota!'); // kiíratjuk ezt a szöveget
+                    console.log(checkbox.value);    
+                    if (checkbox.checked) { sor.style.fontWeight = 'bold';
+                                            hianyzok.push(checkbox.value); //beletesszük a bepipált tanuló nevét a hianyzok tömbbe
+                                           }
+                    else { sor.style.fontWeight = 'normal'; 
+                           // kivettük a pipát
+                           const index = hianyzok.indexOf(checkbox.value);// pipakivézelnél megkeressük az illetőt
+                           console.log(index);             // kiíratjuk a konzolra
+                           hianyzok.splice(index, 1);      // kivesszük a hianyzok[] tömbjéből
+                    }     
+                    console.log(hianyzok);  ///a bepipált tanulkókat kiíratjuk a konzolta
+                    // kiiratjuk a kiválasztott tanuló nevét
+                    });
+                    checkbox.value = adatok[i];  // checkboxnak a tanuló nevét value értékként adjuk
+                    sor.appendChild(checkbox);   // hozzáadjuk mint gyerekelemét
+                    nevlista.appendChild(sor);   // hozzáadjuk mint gyerekelemét                  
+                     
+    
+                  }
+                  const kuldes = document.getElementById('kuldes');
+                  console.log(kuldes);
+                  kuldes.addEventListener('click', () => {
+                  console.log('Megnyomtad az Elküld gombot!');
+                  fetch('http://localhost:3000/api/hianyzok', {
+                         method: 'POST',
+                         headers: {'Content-Type': 'application/json' },
+                         body: JSON.stringify(hianyzok)  // JSON-ná alakítja és elküldi
+                       
+                        })   
+                        .then(valasz => valasz.json())  
+                        .then(adat =>  { console.log(adat);
+                                         document.getElementById('eredmeny').textContent = 
+                                         'Hiányzók száma: ' + adat.hianyzokSzama;
+                                         console.log(adat.hianyzokNevei);
+                                         const hianyzokLista = document.getElementById('hianyzokLista');
+                                         const cim = document.createElement('h2');
+                                         cim.textContent = 'Hiányzók nevei:';
+                                         hianyzokLista.appendChild(cim);
+                                         for (let i = 0; i < adat.hianyzokNevei.length; i++) 
+                                                      { console.log(adat.hianyzokNevei[i]); 
+                                                        const sor = document.createElement('div');
+                                                        sor.textContent = adat.hianyzokNevei[i];
+                                                        hianyzokLista.appendChild(sor);
+                                                      }
+
+
+                                        });        
+                     });
+                    
+            });  // a szerver-válasz feldolgozásának vége
+    </script>
+</head>
+<body>
+    <h1>Osztálynévsor</h1>
+    <!-- Ide kerülnek majd a tanulók nevei -->  
+    <div id="nevlista"></div> <!-- ide illeszti be a JS a szervertől kapott neveket -->  
+    <button id="kuldes">Elküld</button>
+    <p id="eredmeny"></p>
+    <div id="hianyzokLista"></div>
+</body>
+</html>
