@@ -4,6 +4,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 const PORT = process.env.PORT || 3000;
+const path = require('path');
+// Statikus fájlok kiszolgálása
+app.use(express.static(__dirname));
 // Osztálynévsor
 let tanulok = [
     'Kiss Péter',
@@ -12,6 +15,7 @@ let tanulok = [
     'Tóth Éva',
     'Varga János'
 ];
+
 // első API végpont elkészítése
 // GET - osztálynévsor lekérése
 app.get('/api/tanulok', (req, res) => {
