@@ -7,6 +7,10 @@ const PORT = process.env.PORT || 3000;
 const path = require('path');
 // Statikus fájlok kiszolgálása
 app.use(express.static(__dirname));
+// A kezdőoldal megjelenítése
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'hianyzok.html'));
+});
 // Osztálynévsor
 let tanulok = [
     'Kiss Péter',
