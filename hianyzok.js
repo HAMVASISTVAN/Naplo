@@ -19,7 +19,6 @@ let tanulok = [
     'Tóth Éva',
     'Varga János'
 ];
-
 // első API végpont elkészítése
 // GET - osztálynévsor lekérése
 app.get('/api/tanulok', (req, res) => {
@@ -32,10 +31,8 @@ app.post('/api/hianyzok', (req, res) => {
     console.log(darab);            // kiíratjuk a terminálablakba
     res.json({ hianyzokSzama: darab,     // hiányzók darabszámát küldjük vissza
                hianyzokNevei: req.body   // JSON-ként küldi vissza a hiányzókat
-             }); 
-     
+             });      
     });   
-
 app.listen(PORT, () => {
   console.log(`Szerver elindult a ${PORT} porton.`);
 });
